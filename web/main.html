@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/styles.css">
+    <script type="text/javascript" src="/eel.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <title>DBF TO PSQL</title>
+    <script src="../../Projects/node/app.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-warning">
+  <div class="container-fluid sticky-top">
+    <a class="navbar-brand text-dark fs-3  m-3" style="background-color: deepskyblue;" >DBF TO PSQL</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ">
+        <li class="nav-item">
+          <a class="nav-link text-dark fs-4 m-3" aria-current="page" href="about_psql.html">< PSQL данные</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark fs-4  m-3" href="#">Последние выбранные файлы > </a>
+        </li>
+        <li class="nav-item info">
+          <a class="nav-link text-dark fs-3  m-3" href="psqltodbf.html" style="background-color: deepskyblue;" >PSQL TO DBF</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <h2 class="text-center mt-3">Подключение к базе данных и конвертация DBF файла</h2>
+        <div class="col-md-6 ml-3 head ">
+                <select class="form-select mt-5" aria-label="Default select example">
+                  <option selected>PostgreSQL</option>
+                  <option value="1">Microsoft SQL Server</option>
+                </select>
+                <div class="mb-3 mt-5">
+                  <label for="psqlusername" class="form-label">Postgresql USER Name</label>
+                  <input type="text" class="form-control" id="psqlusername" placeholder="user name">
+                </div>
+                <div class="mb-3">
+                  <label for="psqlpassword" class="form-label">Password</label>
+                  <input type="text" class="form-control" id="psqlpassword" placeholder="password">
+                </div>
+
+                 <div class="mb-4">
+                  <label for="psqlhost" class="form-label">HOST</label>
+                  <input type="text" class="form-control" id="psqlhost" placeholder="localhost">
+                </div>
+
+                <div class="mb-4">
+                  <label for="psqldatabase" class="form-label">Database</label>
+                  <input type="text" class="form-control" id="psqldatabase" placeholder="Database Name">
+                </div>
+                <button class="btn btn-danger" id="connect" onclick="total_psql()">Подключиться</button>
+                <div class="alert alert-danger m-3" role="alert" id="connect_info" style="display: none;">
+                </div>
+            <div class="number" id="number"></div>
+            <hr style=" color: black;" size="5">
+             <button type="button" class="items form-control mt-5 btn btn-outline-danger" onclick="click_folder()">Выбрать папку</button>
+            <button type="button" class="form-control mt-5 btn btn-outline-warning" onclick="click_file()">Выбрать файл</button>
+            <button class="form-control mt-5" onclick="test()">test</button>
+        </div>
+        <div class="col-md-6 mt-5 folders"  id="folder">
+             <ul id="list_name" class="list-group"  style="display: none;">
+                      <li class="list-group-item active fs-5" aria-current="true" >Выбраная папка</li>
+                      <li class="list-group-item" id="folder_name"></li>
+             </ul>
+            <ul class="list-group folder_name files mt-3"  id="file" style="display: none;">
+                      <li class="list-group-item active fs-5" aria-current="true">Выбраный файл</li>
+                      <li class="list-group-item" id="files_name" ></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="scripts.js"></script>
+<script type="text/javascript">
+    // Чтобы получить данные Postgresql
+    async function total_psql() {
+        let username = document.getElementById('psqlusername').value
+        let password = document.getElementById('psqlpassword').value
+        let host = document.getElementById('psqlhost').value
+        let database = document.getElementById('psqldatabase').value
+        // await alert(username + password + host + database)
+        await eel.data_psql(username,password, host, database)
+    }
+
+    //для обратного отзыва из банка
+    async function reverse_info(info) {
+        let err = 'Данные введены не правильно повторите еще раз';
+        let succ = ' Успешно подключено';
+        // alert(typeof(info))
+
+        document.getElementById("connect_info").style.display = "block";
+        if (info =='False') {
+            document.getElementById("connect_info").innerHTML = err;
+        }
+        else {
+            document.getElementById("connect_info").innerHTML = succ;
+        }
+    }
+    eel.expose(reverse_info, 'reverse_info')
+    //Для файла
+    function click_file() {
+        eel.chosed_file();
+        if (true)
+            document.getElementById("file").style.display= "block";
+    };
+    function set_file(file) {
+         document.getElementById("files_name").innerHTML = file;
+    }
+    eel.expose(set_file, 'set_file');
+
+    //Для теста
+    function setLoading(currentFase){
+        alert(currentFase)
+    }
+    eel.expose(setLoading,'setLoading')
+    function  test() {
+        eel.load_program();
+    }
+
+    //Для папки
+    function name_file(some) {
+      document.getElementById("folder_name").innerHTML = some;
+    }
+    eel.expose(name_file,'name_file')
+
+    function click_folder() {
+        a = eel.chosed_files()
+        if (a){
+                document.getElementById("list_name").style.display= "block";
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // function first() {
+    //     setTimeout(function () {
+    //         console.log(1)
+    //     }, 10000);
+    // }
+    //
+    // function second() {
+    //     console.log(2)
+    // }
+    // first();
+    // second();
+
+
+    // function mydisplayer(some) {
+    //   document.getElementById("ad").innerHTML = some;
+    // }
+    // function myCalcultor(num1, num2, mycallback) {
+    //     let sum = num1+num2;
+    //     mycallback(sum);
+    // }
+    //
+    // myCalcultor(2,2, mydisplayer)
+    //
+    //
+    // function dohomework(subject, callback) {
+    //     alert(`Starting ${subject} homework.`);
+    //     callback();
+    // }
+    // dohomework('math', function () {
+    //     alert('Finished my homework');
+    // })
+
+</script>
+
+
+</body>
+</html>
