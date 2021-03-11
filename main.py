@@ -180,6 +180,18 @@ def folder_return():
     return name
 
 
+@eel.expose
+def msql_con(data):
+    print('msql принял', data)
+
+
+@eel.expose
+def psql_con(data):
+    print('psql принял', data)
+
+@eel.expose
+def test_sql_con(data):
+    print(data)
 # def sql_connect(user=None, password=None, port=None, database=None):
 #     db = dataset.connect(url="postgresql+psycopg2://{}.:{}.@{}./{}.".format('postgres', 'admin', 'localhost', 'data'))
 #     if db:

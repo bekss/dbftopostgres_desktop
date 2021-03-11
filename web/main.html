@@ -41,10 +41,12 @@
     <div class="row">
         <h2 class="text-center mt-3">Подключение к базе данных и конвертация DBF файла</h2>
         <div class="col-md-6 ml-3 head ">
-                <select class="form-select mt-5" aria-label="Default select example">
-                  <option selected>PostgreSQL</option>
-                  <option value="1">Microsoft SQL Server</option>
+                <select class="form-select mt-5" id="options" aria-label="Default select example" onchange="getSelectValue(connect_sql);">
+                  <option >- - - Выберите базу данных - - -</option>
+                  <option value="postgresql">PostgreSQL</option>
+                  <option value="msql">Microsoft SQL Server</option>
                 </select>
+             <button class="form-control mt-5 btn btn-outline-info" id="connect_sql" onclick="set_sql_data();">Connect To Sql</button>
                 <div class="mb-3 mt-5">
                   <label for="psqlusername" class="form-label">Postgresql USER Name</label>
                   <input type="text" class="form-control" id="psqlusername" placeholder="user name">
@@ -149,7 +151,39 @@
     }
 
 
+    //Для selecter чтобы получить значения
+    // function getSelectValue(sql) {
+    //     let selectedValue = document.getElementById('options').value;
+    //     if (selectedValue!= '- - - Выберите базу данных - - -'){
+    //         alert(selectedValue);
+    //         sql(selectedValue);
+    //     }
+    //     // else
+    //     //     selectedValue.value = this.options[this.selectedIndex].value;
+    // }
+    //
+    function connect_sql(sql_name) {
+        if (sql_name =='msql'){
+            eel.sql_con(sql_name)
+        }
+        if (sql_name=='postgresql'){
+            eel.psql_con(sql_name)
+        }
+    }
 
+    function set_sql_data() {
+        let selectedValue = document.getElementById('options').value;
+        if (selectedValue == 'msql'){
+            alert(selectedValue);
+            // sql(selectedValue);
+            eel.msql_con(selectedValue);
+        }
+        if (selectedValue == 'postgresql'){
+            alert(selectedValue);
+            // sql(selectedValue);
+            eel.psql_con(selectedValue);
+        }
+    }
 
 
 
