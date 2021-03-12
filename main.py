@@ -31,6 +31,7 @@ import glob, os
 import dataset
 import sqlalchemy
 import psycopg2
+import json
 
 from dbfread import DBF
 from tkinter import *
@@ -73,6 +74,27 @@ def get_filepath():
     Tk().withdraw()
     return askopenfilename()
 
+
+# Отсюда берется данные для PSQL
+def read_psql_conf():
+    global config_dir
+    a = os.getcwd()
+    print(a)
+    # print("После создания txt файла ", os.getcwd())
+    # print(os.listdir()) #Проверка файла txt
+    # if os.getcwd() == a+'\\config':
+    os.chdir(a+'\\config')
+
+    with open("config.txt", "r", encoding='utf-8') as f:
+        for l in f:
+            print(l)
+            data = l
+            a = json.loads(data)
+            # print(type(a))
+            # print(a, '\n', a['username'])
+            return a
+
+
 """Для чтения папки"""
 @eel.expose
 def selectFolder():
@@ -88,7 +110,12 @@ def selectFolder():
 
 """Проверяет только папку, если есть в папке dbf файл то да"""
 def chek_dbf_folder(files):
-    db = dataset.connect(url='postgresql+psycopg2://postgres:admin@localhost/data')
+    print(files)
+    os.chdir('C:\\Users\\bekaa\\Desktop\\Projects\\dbftopostgres_desktop')
+    print("я здесь ", os.getcwd())
+    sql = read_psql_conf()
+    print(sql['username'])
+    db = dataset.connect(url=f'postgresql+psycopg2://postgres:beka@localhost/data')
     if db:
         print('connected')
     else:
@@ -148,6 +175,31 @@ def data_psql(username, password, host, database):
         print('Не подключено к PSQL')
         eel.reverse_info('False')
         return False
+
+
+
+
+
+@eel.expose
+def psql_conn():
+    try:
+        conf_sql=read_psql_conf()
+        conn = psycopg2.connect(f"dbname={conf_sql['database']} user={conf_sql['username']} password={conf_sql['password']} host={conf_sql['host']}")
+        print('Подключено к PSQL')
+        # print(f' имя: {username} \n пароль: {password} \n хост: {host} \n база данных: {database}')
+        eel.reverse_info('True')
+        return True
+    except:
+        print('Не подключено к PSQL')
+        eel.reverse_info('False')
+        return False
+
+
+
+
+
+
+
 
 
 def config_psql():

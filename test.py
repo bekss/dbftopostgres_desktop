@@ -14,7 +14,8 @@ import json
 # else:
 #     print('dont connected')
 def create_psql_conf():
-    config_dir = 'config_psql'  #Имя config файла psql
+    global config_dir
+    config_dir = 'config'  #Имя config файла psql
     config_txt = 'config.txt'
     directory_path = os.getcwd()
 
@@ -32,17 +33,28 @@ def create_psql_conf():
 
 
 def read_psql_conf():
-    print("После создания txt файла ", os.getcwd())
-    print(os.listdir()) #Проверка файла txt
+    global config_dir
+    a = os.getcwd()
+    # print("После создания txt файла ", os.getcwd())
+    # print(os.listdir()) #Проверка файла txt
 
-    # os.chdir(a+f'\\{config_dir}')
-    with open("config.txt", "r", encoding='utf-8') as f: # Чтобы вытаскывать все данные
+    os.chdir(a+'\\config')
+    with open("config.txt", "r", encoding='utf-8') as f:
         for l in f:
             print(l)
             data = l
             a = json.loads(data)
-            print(type(a))
-            print(a, '\n', a['username'])
+            # print(type(a))
+            # print(a, '\n', a['username'])
+            return a
+# create_psql_conf()
+# a = read_psql_conf()
+# print(type(a))
+# print(a['username'])
+conf_sql = read_psql_conf()
+conn = psycopg2.connect(f"dbname={conf_sql['database']} user={conf_sql['username']} password={conf_sql['password']} host={conf_sql['host']}")
+if conn:
+        print('Подключено к PSQL')
 
 # def psql():
 #     try:

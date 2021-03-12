@@ -84,9 +84,7 @@
                       <li class="list-group-item" id="files_name" ></li>
             </ul>
         </div>
-
     </div>
-
 </div>
 
 
@@ -101,13 +99,11 @@
         // await alert(username + password + host + database)
         await eel.data_psql(username,password, host, database)
     }
-
     //для обратного отзыва из банка
     async function reverse_info(info) {
         let err = 'Данные введены не правильно повторите еще раз';
         let succ = ' Успешно подключено';
         // alert(typeof(info))
-
         document.getElementById("connect_info").style.display = "block";
         if (info =='False') {
             document.getElementById("connect_info").innerHTML = err;
@@ -181,7 +177,7 @@
         if (selectedValue == 'postgresql'){
             alert(selectedValue);
             // sql(selectedValue);
-            eel.psql_con(selectedValue);
+            eel.psql_conn();
         }
     }
 
