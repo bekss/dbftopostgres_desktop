@@ -5,7 +5,9 @@ import sqlalchemy as sql
 from dbfread import DBF
 import os
 import json
-
+import glob
+import sys
+import pathlib
 
 # db = sql.create_engine('postgresql+psycopg2://postgres:admin@localhost/data')
 # connect = db.connect()
@@ -18,7 +20,11 @@ import json
 # Для подключение MSSQL
 def create_psql_conf():
     global config_dir
+<<<<<<< HEAD
     config_dir = 'config_sql'  #Имя config файла psql
+=======
+    config_dir = 'config'  #Имя config файла psql
+>>>>>>> 6c8755e4321bc85e947eaa1d4d97f0fd367f73ec
     config_txt = 'config.txt'
     directory_path = os.getcwd()
 
@@ -35,6 +41,7 @@ def create_psql_conf():
         text_file.write('{"username":"postgres", "password":"admin", "host":"host", "database":"data"}')
 
 
+<<<<<<< HEAD
 def read_sql_conf():
     print("После создания txt файла ", os.getcwd())
     print(os.listdir()) #Проверка файла txt
@@ -47,6 +54,74 @@ def read_sql_conf():
             a = json.loads(data)
             print(type(a))
             print(a, '\n', a['username'])
+=======
+def read_psql_conf():
+    global config_dir
+    a = os.getcwd()
+    for path in sys.path:
+        if os.path.exists(os.path.join(path, 'config/config.txt')):
+            print('some_module is heresdf safd asdfsfd : {}'.format(path))
+            a = path
+
+    print('desktop бул',a)
+    print(os.getcwd())
+    os.chdir(a+'\\config')
+    print(os.getcwd())
+
+
+
+    # print("После создания txt файла ", os.getcwd())
+    # print(os.listdir()) #Проверка файла txt
+    # с = os.chdir(b)
+    # print('Теперь 3 директория', с)
+    # os.chdir(a+'\\config')
+
+    # with open("config.txt", "r", encoding='utf-8') as f:
+    #     for l in f:
+    #         print(l)
+    #         data = l
+    #         a = json.loads(data)
+    #         # print(type(a))
+    #         # print(a, '\n', a['username'])
+    #         return a
+# create_psql_conf()
+read_psql_conf()
+# print(type(a))
+# print(a['username'])
+
+
+#
+# import sys
+# import os
+#
+# print(os.getcwd())
+# for path in sys.path:
+#    if os.path.exists(os.path.join(path, 'config/config.txt')):
+#       print('some_module is heresdf safd asdfsfd : {}'.format(path))
+#
+
+
+
+# import os
+# from os.path import join
+# import fnmatch
+# lookfor = "config.txt"
+# for root, dirs, files in os.walk('C:\\'):
+#     for found in fnmatch.filter(files, lookfor):
+#         print("found: %s" % join(root, found))
+
+#
+# filename = 'config.txt'
+# for root, dirnames, filenames in os.walk('/config'):
+#     for file in filenames:
+#         if file == filename:
+#             print(os.path.join(root, file))
+
+# conf_sql = read_psql_conf()
+# conn = psycopg2.connect(f"dbname={conf_sql['database']} user={conf_sql['username']} password={conf_sql['password']} host={conf_sql['host']}")
+# if conn:
+#         print('Подключено к PSQL')
+>>>>>>> 6c8755e4321bc85e947eaa1d4d97f0fd367f73ec
 
 create_psql_conf()
 read_sql_conf()

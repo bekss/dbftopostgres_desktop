@@ -31,6 +31,7 @@ import glob, os
 import dataset
 import sqlalchemy
 import psycopg2
+import json
 
 from dbfread import DBF
 from tkinter import *
@@ -73,6 +74,49 @@ def get_filepath():
     Tk().withdraw()
     return askopenfilename()
 
+
+# Отсюда берется данные для PSQL
+def read_psql_conf():
+    global config_dir
+    a = os.getcwd()
+    print(a)
+    # print("После создания txt файла ", os.getcwd())
+    print(os.listdir()) #Проверка файла txt
+    if os.path.exists(a+'\\config\\config.txt'):
+        print('config.txt файл существует')
+    else:
+        print('Такого файла не существует')
+    if os.getcwd() == a:
+        os.chdir(a+'\\config')
+
+    with open("config.txt", "r", encoding='utf-8') as f:
+        for l in f:
+            print(l)
+            data = l
+            a = json.loads(data)
+            # print(type(a))
+            # print(a, '\n', a['username'])
+            return a
+
+
+def read_msql_conf():
+    global config_dir
+    a = os.getcwd()
+    print(os.listdir()) #Проверка файла txt
+    if os.path.exists(a+'\\config\\config_msql.txt'):
+        print('config.txt файл существует')
+    else:
+        print('Такого файла не существует')
+    if os.getcwd() == a:
+        os.chdir(a+'\\config')
+
+    with open("config.txt", "r", encoding='utf-8') as f:
+        for l in f:
+            print(l)
+            data = l
+            a = json.loads(data)
+            return a
+
 """Для чтения папки"""
 @eel.expose
 def selectFolder():
@@ -88,12 +132,27 @@ def selectFolder():
 
 """Проверяет только папку, если есть в папке dbf файл то да"""
 def chek_dbf_folder(files):
-    db = dataset.connect(url='postgresql+psycopg2://postgres:admin@localhost/data')
+    print("Это файл",files)
+    print("С перва я здесь ", os.getcwd())
+    for path in sys.path:
+        if os.path.exists(os.path.join(path, 'config/config.txt')):
+            print('some_module is heresdf safd asdfsfd : {}'.format(path))
+            a = path #Путь на один каталог назад
+
+    print('desktop бул', a)
+    print(os.getcwd())
+    print(os.getcwd())
+    os.chdir(a)
+    print("я здесь ", os.getcwd())
+    sql = read_psql_conf()
+    print(sql['username'])
+    db = dataset.connect(url=f'postgresql+psycopg2://{sql["username"]}:{sql["password"]}@{sql["host"]}/{sql["database"]}')
     if db:
         print('connected')
     else:
         print('not connected')
-    os.chdir(files)
+    # os.chdir(files)
+    # print(os.getcwd())
     for file in glob.glob('*.dbf'):
         print(file)
         # if glob.glob('*.dbf') not in os.chdir(files):
@@ -113,6 +172,8 @@ def chek_dbf_folder(files):
 
 """Только для файла"""
 def convert_to_psql_file(dbf_path):
+    msql = read_msql_conf()
+    print(msql['username'])
     # db = dataset.connect(url=f"postgresql+psycopg2://{}.:{}.@{}./{}.".format('postgres', 'beka', 'localhost', 'data'))
     db = dataset.connect(url='postgresql+psycopg2://postgres:admin@localhost/data')
     if db:
@@ -150,6 +211,31 @@ def data_psql(username, password, host, database):
         return False
 
 
+
+
+
+@eel.expose
+def psql_conn():
+    try:
+        conf_sql = read_psql_conf()
+        conn = psycopg2.connect(f"dbname={conf_sql['database']} user={conf_sql['username']} password={conf_sql['password']} host={conf_sql['host']}")
+        print('Подключено к PSQL')
+        # print(f' имя: {username} \n пароль: {password} \n хост: {host} \n база данных: {database}')
+        eel.reverse_info('True')
+        return True
+    except:
+        print('Не подключено к PSQL')
+        eel.reverse_info('False')
+        return False
+
+
+
+
+
+
+
+
+
 def config_psql():
     pass
 
@@ -180,6 +266,18 @@ def folder_return():
     return name
 
 
+@eel.expose
+def msql_con(data):
+    print('msql принял', data)
+
+
+@eel.expose
+def psql_con(data):
+    print('psql принял', data)
+
+@eel.expose
+def test_sql_con(data):
+    print(data)
 # def sql_connect(user=None, password=None, port=None, database=None):
 #     db = dataset.connect(url="postgresql+psycopg2://{}.:{}.@{}./{}.".format('postgres', 'admin', 'localhost', 'data'))
 #     if db:
