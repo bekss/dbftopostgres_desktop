@@ -43,6 +43,7 @@ def pythonFunction(wildcard="*.dbf"):
     # get_one_file(path)
     # chek_dbf_os(path)
     # convert_psql_file(path)
+    print(_CHOSED_SQL)
     if _CHOSED_SQL == _MSSQL:
         print('был выбран MSSQL')
         convert_msql_file(path)
@@ -62,7 +63,6 @@ def get_filepath():
 
 """Отсюда берется данные для PSQL"""
 def read_psql_conf():
-    global config_dir
     a = os.getcwd()
     print(a)
     # print("После создания txt файла ", os.getcwd())
@@ -302,18 +302,22 @@ def psql_conn():
 def msql_conn():
     global _CHOSED_SQL
     global _MSSQL
+    msql = read_msql_conf()
     try:
-        msql = read_msql_conf()
-        user = msql['username']
-        pas = msql['password']
-        data = msql['database']
+
+        print(msql)
+        # user = msql['username']
+        # pas = msql['password']
+        # data = msql['database']
+        # sqldriver = msql['sqldriver']
         _CHOSED_SQL = _MSSQL
         print(_CHOSED_SQL)
-        print(pas)
+        # print(pas)
         # conn = pymssql.connect(f"dbname={msql['database']} user={msql['username']} password={msql['password']} host={msql['host']} port={msql['port']}")
         # conn = pymssql.connect(f"user={msql['username']}, password={msql['password']} , database={msql['database']}")
         # conn = pymssql.connect(user="beksultan", password= "beksultan", database ="data")
-        conn = pymssql.connect(user='beksultan', password='beksultan', database='data')
+        # conn = pymssql.connect(user='beksultan', password='beksultan', database='data')
+        conn = pyodbc.connect("DRIVER={SQL Server};SERVER=localhost;DATABASE=data;UID=beksultan;PWD=beksultan")
         if conn:
             print('connected')
             cursor = conn.cursor()
