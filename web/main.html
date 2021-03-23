@@ -41,6 +41,11 @@
     <div class="row">
         <h2 class="text-center mt-3">Подключение к базе данных и конвертация DBF файла</h2>
         <div class="col-md-6 ml-3 head ">
+            <div class="col-md-3">
+                <div class="spinner-grow text-danger" id="signal" role="status" style="display: none;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
                 <select class="form-select mt-5" id="options" aria-label="Default select example" onchange="getSelectValue(connect_sql);">
                   <option >- - - Выберите базу данных - - -</option>
                   <option value="postgresql">PostgreSQL</option>
@@ -110,6 +115,7 @@
         }
         else {
             document.getElementById("connect_info").innerHTML = succ;
+            work_event();
         }
     }
     eel.expose(reverse_info, 'reverse_info')
@@ -145,7 +151,9 @@
                 document.getElementById("list_name").style.display= "block";
         }
     }
-
+    async function work_event() {
+         document.getElementById("signal").style.display = "block";
+    }
 
     //Для selecter чтобы получить значения
     // function getSelectValue(sql) {
@@ -158,21 +166,23 @@
     //     //     selectedValue.value = this.options[this.selectedIndex].value;
     // }
     //
-    function connect_sql(sql_name) {
-        if (sql_name =='msql'){
-            eel.sql_con(sql_name)
-        }
-        if (sql_name=='postgresql'){
-            eel.psql_con(sql_name)
-        }
-    }
+
+
+    // function connect_sql(sql_name) {
+    //     if (sql_name =='msql'){
+    //         eel.sql_con(sql_name)
+    //     }
+    //     if (sql_name=='postgresql'){
+    //         eel.psql_con(sql_name)
+    //     }
+    // }
 
     function set_sql_data() {
         let selectedValue = document.getElementById('options').value;
         if (selectedValue == 'msql'){
             alert(selectedValue);
             // sql(selectedValue);
-            eel.msql_con(selectedValue);
+            eel.msql_conn();
         }
         if (selectedValue == 'postgresql'){
             alert(selectedValue);
