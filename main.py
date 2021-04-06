@@ -47,7 +47,7 @@ def pythonFunction(wildcard="*.dbf"):
         print('был выбран POSTGRESQL', path)
         convert_psql_file(path)
     print("Был выбран", _CHOSED_SQL)
-    print(path)
+
     return path
 
 
@@ -62,8 +62,6 @@ def read_psql_conf():
     Отсюда берется данные для PSQL From hier taking a data for connection SQLs.For example username, password,
     database, host e.t.c
     """
-    a = os.getcwd()
-    print(a)
     print(os.listdir())  # Проверка файла txt
 
     for path in sys.path:
@@ -72,11 +70,7 @@ def read_psql_conf():
             full = path
         else:
             print('Такого файла не существует')
-
-    print('До перехода', os.getcwd())
-    # if os.getcwd() == a:
     os.chdir(full + '\\config')
-    print("Теперь", os.getcwd())
 
     with open("config.txt", "r", encoding='utf-8') as f:
         for l in f:
@@ -128,18 +122,15 @@ def selectFolder():
 
 def convert_folder_psql(files):
     """First cheking a folder, if in a folder have dbf files then begining to convert"""
-    print("Это файл", files)
-    print("С перва я здесь ", os.getcwd())
+
     for path in sys.path:
         if os.path.exists(os.path.join(path, 'config/config.txt')):
             print('some_module is heresdf safd asdfsfd : {}'.format(path))
             a = path  # Путь на один каталог назад
 
-    print('desktop бул', a)
+
     os.chdir(a)
-    print("я здесь ", os.getcwd())
     sql = read_psql_conf()
-    print(sql['username'])
     db = dataset.connect(
         url=f'postgresql+psycopg2://{sql["username"]}:{sql["password"]}@{sql["host"]}/{sql["database"]}')
     if db:
@@ -147,7 +138,6 @@ def convert_folder_psql(files):
     else:
         print('not connected')
     os.chdir(files)
-    print(os.getcwd())
     for file in glob.glob('*.dbf'):
         print(file)
         # if glob.glob('*.dbf') not in os.chdir(files):
@@ -160,18 +150,13 @@ def convert_folder_psql(files):
 
 def convert_folder_msql(files):
     """First cheking a folder, if in a folder have dbf files then begining to convert"""
-    print("Это файл", files)
-    print("С перва я здесь ", os.getcwd())
     for path in sys.path:
         if os.path.exists(os.path.join(path, 'config/config_msql.txt')):
             print('some_module is heresdf safd asdfsfd : {}'.format(path))
             a = path  # Путь на один каталог назад
 
-    print('desktop бул', a)
     os.chdir(a)
-    print("я здесь ", os.getcwd())
     msql = read_msql_conf()
-    print(msql['username'])
     db = dataset.connect(
         url=f"mssql+pymssql://{msql['username']}:{msql['password']}@{msql['host']}:{msql['port']}/{msql['database']}")
     if db:
@@ -189,9 +174,7 @@ def convert_folder_msql(files):
 
 def convert_psql_file(dbf_path):
     """Function for converting only file."""
-    print("Получил", dbf_path)
     sql = read_psql_conf()
-    print(sql['username'])
     db = dataset.connect(
         url=f'postgresql+psycopg2://{sql["username"]}:{sql["password"]}@{sql["host"]}/{sql["database"]}')
     if db:
@@ -210,9 +193,7 @@ def convert_psql_file(dbf_path):
 
 def convert_msql_file(dbf_path):
     """This funcfion converting a file to MSSQL"""
-    # print(dbf_path)
     msql = read_msql_conf()
-    print(msql['username'])
     db = dataset.connect(
         url=f"mssql+pymssql://{msql['username']}:{msql['password']}@{msql['host']}:{msql['port']}/{msql['database']}")
     if db:
@@ -353,7 +334,6 @@ def psql_con(data):
 @eel.expose
 def test_sql_con(data):
     print(data)
-
 
 
 eel.start('main.html')
