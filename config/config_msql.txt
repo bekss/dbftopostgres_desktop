@@ -1,1 +1,1 @@
-{"username":"beksultan", "password":"beksultan", "host":"localhost", "database":"data","port":"1433","sqldriver":"SQL Server", "server":"DESKTOP-OG81R5M\\SQLEXPRESS"}
+{"username":"beksultan", "password":"beksultan", "host":"127.0.0.1", "database":"data","port":"1433","sqldriver":"SQL Server", "server":"DESKTOP-OG81R5M\\SQLEXPRESS"}

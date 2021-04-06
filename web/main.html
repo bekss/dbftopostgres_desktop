@@ -52,32 +52,32 @@
                   <option value="msql">Microsoft SQL Server</option>
                 </select>
              <button class="form-control mt-5 btn btn-outline-info" id="connect_sql" onclick="set_sql_data();">Connect To Sql</button>
-                <div class="mb-3 mt-5">
-                  <label for="psqlusername" class="form-label">Postgresql USER Name</label>
-                  <input type="text" class="form-control" id="psqlusername" placeholder="user name">
-                </div>
-                <div class="mb-3">
-                  <label for="psqlpassword" class="form-label">Password</label>
-                  <input type="text" class="form-control" id="psqlpassword" placeholder="password">
-                </div>
+<!--                <div class="mb-3 mt-5">-->
+<!--                  <label for="psqlusername" class="form-label">Postgresql USER Name</label>-->
+<!--                  <input type="text" class="form-control" id="psqlusername" placeholder="user name">-->
+<!--                </div>-->
+<!--                <div class="mb-3">-->
+<!--                  <label for="psqlpassword" class="form-label">Password</label>-->
+<!--                  <input type="text" class="form-control" id="psqlpassword" placeholder="password">-->
+<!--                </div>-->
 
-                 <div class="mb-4">
-                  <label for="psqlhost" class="form-label">HOST</label>
-                  <input type="text" class="form-control" id="psqlhost" placeholder="localhost">
-                </div>
+<!--                 <div class="mb-4">-->
+<!--                  <label for="psqlhost" class="form-label">HOST</label>-->
+<!--                  <input type="text" class="form-control" id="psqlhost" placeholder="localhost">-->
+<!--                </div>-->
 
-                <div class="mb-4">
-                  <label for="psqldatabase" class="form-label">Database</label>
-                  <input type="text" class="form-control" id="psqldatabase" placeholder="Database Name">
-                </div>
-                <button class="btn btn-danger" id="connect" onclick="total_psql()">Подключиться</button>
+<!--                <div class="mb-4">-->
+<!--                  <label for="psqldatabase" class="form-label">Database</label>-->
+<!--                  <input type="text" class="form-control" id="psqldatabase" placeholder="Database Name">-->
+<!--                </div>-->
+<!--                <button class="btn btn-danger" id="connect" onclick="total_psql()">Подключиться</button>-->
                 <div class="alert alert-danger m-3" role="alert" id="connect_info" style="display: none;">
                 </div>
             <div class="number" id="number"></div>
             <hr style=" color: black;" size="5">
              <button type="button" class="items form-control mt-5 btn btn-outline-danger" onclick="click_folder()">Выбрать папку</button>
             <button type="button" class="form-control mt-5 btn btn-outline-warning" onclick="click_file()">Выбрать файл</button>
-            <button class="form-control mt-5" onclick="test()">test</button>
+<!--            <button class="form-control mt-5" onclick="test()">test</button>-->
         </div>
         <div class="col-md-6 mt-5 folders"  id="folder">
              <ul id="list_name" class="list-group"  style="display: none;">
@@ -86,7 +86,7 @@
              </ul>
             <ul class="list-group folder_name files mt-3"  id="file" style="display: none;">
                       <li class="list-group-item active fs-5" aria-current="true">Выбраный файл</li>
-                      <li class="list-group-item" id="files_name" ></li>
+                      <li class="list-group-item" id="files_name"></li>
             </ul>
         </div>
     </div>
@@ -105,9 +105,9 @@
         await eel.data_psql(username,password, host, database)
     }
     //для обратного отзыва из банка
-    async function reverse_info(info) {
+    async function reverse_info(info, namesql) {
         let err = 'Данные введены не правильно повторите еще раз';
-        let succ = ' Успешно подключено';
+        let succ = 'Успешно подключено к '+ namesql;
         // alert(typeof(info))
         document.getElementById("connect_info").style.display = "block";
         if (info =='False') {
@@ -180,6 +180,7 @@
     function set_sql_data() {
         let selectedValue = document.getElementById('options').value;
         if (selectedValue == 'msql'){
+
             alert(selectedValue);
             // sql(selectedValue);
             eel.msql_conn();
