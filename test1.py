@@ -4,6 +4,8 @@ from dbfread import DBF
 import pyodbc
 import pymssql
 
+
+
 # 'Driver = {ODBC Driver 13 for SQL Server}; Server = NameServer; uid = sa; pwd = '
 #                             'myPassword; Database = BaseName
 # DRIVER={SQL Server};SERVER=localhost;DATABASE=testdb;UID=user;PWD=password
@@ -53,16 +55,16 @@ conn = pyodbc.connect("DRIVER={SQL Server};SERVER=212.42.101.123;DATABASE=Struct
 
 
 #
-db = dataset.connect(url='mssql+pymssql://beksultan:beksultan@127.0.0.1:1433/data')
-print('connected')
-cursor = conn.cursor()
-cursor.execute("SELECT * FROM information_schema.tables WHERE table_name = 'stest.dbf'")
-row = cursor.fetchone()
-print(row)
-if row is None:
-    print('Noneee')
-else:
-    print('haveed')
+# db = dataset.connect(url='mssql+pymssql://beksultan:beksultan@127.0.0.1:1433/data')
+# print('connected')
+# cursor = conn.cursor()
+# cursor.execute("SELECT * FROM information_schema.tables WHERE table_name = 'stest.dbf'")
+# row = cursor.fetchone()
+# print(row)
+# if row is None:
+#     print('Noneee')
+# else:
+#     print('haveed')
 # while row:
 #     print("ID=%s" % (row[0]))
 #     row = cursor.fetchone()

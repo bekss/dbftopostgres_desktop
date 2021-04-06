@@ -12,12 +12,11 @@ from dbfread import DBF
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 
-eel.init('web', allowed_extensions=['.js', '.html'])
-
-
 _CHOSED_SQL = ' '
 _POSTSQL = 'Postgresql'
 _MSSQL = 'Mssql'
+
+eel.init('web', allowed_extensions=['.js', '.html'])
 
 
 def chek_dbf_os(files):
@@ -29,11 +28,9 @@ def chek_dbf_os(files):
         print(os.path.join(files, file))
 
 
-
 @eel.expose
 def pythonFunction(wildcard="*.dbf"):
     """Выбор толкько файла This function choosed only dbf files and giving root path"""
-    # print(_CHOSED_SQL)
     app = wx.App(None)
     style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
     dialog = wx.FileDialog(None, 'Open', wildcard=wildcard, style=style)
@@ -42,9 +39,6 @@ def pythonFunction(wildcard="*.dbf"):
     else:
         path = None
     dialog.Destroy()
-    # get_one_file(path)
-    # chek_dbf_os(path)
-    # convert_psql_file(path)
     print(_CHOSED_SQL)
     if _CHOSED_SQL == _MSSQL:
         print('был выбран MSSQL')
@@ -70,7 +64,6 @@ def read_psql_conf():
     """
     a = os.getcwd()
     print(a)
-    # print("После создания txt файла ", os.getcwd())
     print(os.listdir())  # Проверка файла txt
 
     for path in sys.path:
@@ -80,10 +73,6 @@ def read_psql_conf():
         else:
             print('Такого файла не существует')
 
-    # if os.path.exists(path+'\\config\\config.txt'):
-    #     print('config.txt файл существует')
-    # else:
-    #     print('Такого файла не существует')
     print('До перехода', os.getcwd())
     # if os.getcwd() == a:
     os.chdir(full + '\\config')
@@ -94,15 +83,12 @@ def read_psql_conf():
             print(l)
             data = l
             a = json.loads(data)
-            # print(type(a))
-            # print(a, '\n', a['username'])
             return a
 
 
 def read_msql_conf():
     a = os.getcwd()
     print(a)
-    # print("После создания txt файла ", os.getcwd())
     print(os.listdir())  # Проверка файла txt
 
     for path in sys.path:
@@ -111,13 +97,7 @@ def read_msql_conf():
             full = path
         else:
             print('Такого файла не существует')
-
-    # if os.path.exists(path+'\\config\\config.txt'):
-    #     print('config.txt файл существует')
-    # else:
-    #     print('Такого файла не существует')
     print('До перехода', os.getcwd())
-    # if os.getcwd() == a:
     os.chdir(full + '\\config')
     print("Теперь", os.getcwd())
 
@@ -126,10 +106,7 @@ def read_msql_conf():
             print(l)
             data = l
             a = json.loads(data)
-            # print(type(a))
-            # print(a, '\n', a['username'])
             return a
-
 
 
 @eel.expose
@@ -145,11 +122,7 @@ def selectFolder():
         print('был выбран MSSQL')
         convert_folder_msql(directory_path)
     elif _CHOSED_SQL == 'Postgresql':
-        print('был выбран POSTGRESQL', directory_path)
         convert_folder_psql(directory_path)
-    print("Был выбран",_CHOSED_SQL)
-    # convert_folder_psql(directory_path)
-    print(directory_path)
     return directory_path
 
 
@@ -179,11 +152,10 @@ def convert_folder_psql(files):
         print(file)
         # if glob.glob('*.dbf') not in os.chdir(files):
         #     print('Вашем файле нету данных')
-        table = db.create_table(file)
-        table = db[file]
+        name_table = os.path.splitext(file)[0]
+        table = db[name_table]
         for record in DBF(file):
             table.insert(record)
-
 
 
 def convert_folder_msql(files):
@@ -209,23 +181,17 @@ def convert_folder_msql(files):
     os.chdir(files)
     print(os.getcwd())
     for file in glob.glob('*.dbf'):
-        print(file)
-        # if glob.glob('*.dbf') not in os.chdir(files):
-        #     print('Вашем файле нету данных')
-        table = db.create_table(file)
-        table = db[file]
+        name_table = os.path.splitext(file)[0]
+        table = db[name_table]
         for record in DBF(file):
             table.insert(record)
 
 
-
-
 def convert_psql_file(dbf_path):
     """Function for converting only file."""
-    print( "Получил", dbf_path)
+    print("Получил", dbf_path)
     sql = read_psql_conf()
     print(sql['username'])
-    # db = dataset.connect(url=f"postgresql+psycopg2://{}.:{}.@{}./{}.".format('postgres', 'beka', 'localhost', 'data'))
     db = dataset.connect(
         url=f'postgresql+psycopg2://{sql["username"]}:{sql["password"]}@{sql["host"]}/{sql["database"]}')
     if db:
@@ -235,9 +201,9 @@ def convert_psql_file(dbf_path):
     print(dbf_path)
     dbf_path1 = os.path.basename(dbf_path)
     print(dbf_path1)
-
-    table = db.create_table(dbf_path1)
-    table = db[dbf_path1]
+    dbf_path_second = os.path.basename(dbf_path)
+    name_table = os.path.splitext(dbf_path_second)[0]
+    table = db[name_table]
     for record in DBF(dbf_path):
         table.insert(record)
 
@@ -247,25 +213,23 @@ def convert_msql_file(dbf_path):
     # print(dbf_path)
     msql = read_msql_conf()
     print(msql['username'])
-    db = dataset.connect(url=f"mssql+pymssql://{msql['username']}:{msql['password']}@{msql['host']}:{msql['port']}/{msql['database']}")
+    db = dataset.connect(
+        url=f"mssql+pymssql://{msql['username']}:{msql['password']}@{msql['host']}:{msql['port']}/{msql['database']}")
     if db:
         print('connected')
     else:
         print('not connected')
-    print(dbf_path)
-    dbf_path1 = os.path.basename(dbf_path)
-    print(dbf_path1)
-
-    table = db.create_table(dbf_path1)
-    table = db[dbf_path1]
+    dbf_path_second = os.path.basename(dbf_path)
+    name_table = os.path.splitext(dbf_path_second)[0]
+    print('name table', name_table)
+    table = db[name_table]
     for record in DBF(dbf_path):
         table.insert(record)
 
 
-
 @eel.expose
 def data_psql(username, password, host, database):
-    """Connection to Postgresql database """
+    """Connection to Postgresql database from inputs in first version"""
     # if username is None:
     #     print('пожалуйста заполните поля')
     try:
@@ -345,27 +309,10 @@ def msql_conn():
         conn = pyodbc.connect("DRIVER={SQL Server};SERVER=%s;DATABASE=%s;UID=%s;PWD=%s" % (host, data, user, pas))
         if conn:
             print('connected')
-            # cursor = conn.cursor()
-            # cursor.execute('SELECT * FROM people')
-            # row = cursor.fetchone()
-            # while row:
-            #     print("ID=%s" % (row[0]))
-            #     row = cursor.fetchone()
-
-        # else:
-        #     print('not connected')
-        #     eel.reverse_info('False')
-        #     return False
-        # # conn = pymssql.connect(f"user={msql['username']} password={msql['password']} database={msql['database']}")
-
-
-
 
         print('Подключено к MSQL')
         eel.reverse_info('True', 'MSQL')
-        # conn.close()
-        # if conn.close():
-        #     print('база closed')
+        conn.close()
         return True
     except:
         print('Не подключено к MSQL')
@@ -408,6 +355,11 @@ def test_sql_con(data):
     print(data)
 
 
+
+eel.start('main.html')
+
+
+
 # def sql_connect(user=None, password=None, port=None, database=None):
 #     db = dataset.connect(url="postgresql+psycopg2://{}.:{}.@{}./{}.".format('postgres', 'admin', 'localhost', 'data'))
 #     if db:
@@ -416,7 +368,6 @@ def test_sql_con(data):
 #         print('not connected')
 
 # sql_connect()
-eel.start('main.html')
 
 # def get_one_file(files):
 #     script_dir = os.path.dirname(__file__)
