@@ -1,16 +1,16 @@
-import eel
-import wx
-import tkinter.filedialog as filedialog
-import glob, os
-import dataset
-import psycopg2
+import glob
 import json
-import pymssql
-import pyodbc
-
-from dbfread import DBF
+import os
+import tkinter.filedialog as filedialog
 from tkinter import *
 from tkinter.filedialog import askopenfilename
+
+import dataset
+import eel
+import psycopg2
+import pyodbc
+import wx
+from dbfread import DBF
 
 _CHOSED_SQL = ' '
 _POSTSQL = 'Postgresql'
@@ -127,7 +127,6 @@ def convert_folder_psql(files):
         if os.path.exists(os.path.join(path, 'config/config.txt')):
             print('some_module is heresdf safd asdfsfd : {}'.format(path))
             a = path  # Путь на один каталог назад
-
 
     os.chdir(a)
     sql = read_psql_conf()
@@ -247,6 +246,7 @@ def data_psql(username, password, host, database):
 
 @eel.expose
 def psql_conn():
+    """PSQL connection check"""
     global _CHOSED_SQL
     global _POSTSQL
     try:
@@ -331,14 +331,7 @@ def psql_con(data):
     print('psql принял', data)
 
 
-@eel.expose
-def test_sql_con(data):
-    print(data)
-
-
-eel.start('main.html')
-
-
+eel.start('main.html', port=4000 )
 
 # def sql_connect(user=None, password=None, port=None, database=None):
 #     db = dataset.connect(url="postgresql+psycopg2://{}.:{}.@{}./{}.".format('postgres', 'admin', 'localhost', 'data'))
