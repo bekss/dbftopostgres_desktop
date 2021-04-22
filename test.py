@@ -20,11 +20,10 @@ import pathlib
 # Для подключение MSSQL
 def create_psql_conf():
     global config_dir
-<<<<<<< HEAD
+
     config_dir = 'config_sql'  #Имя config файла psql
-=======
     config_dir = 'config'  #Имя config файла psql
->>>>>>> 6c8755e4321bc85e947eaa1d4d97f0fd367f73ec
+
     config_txt = 'config.txt'
     directory_path = os.getcwd()
 
@@ -39,34 +38,60 @@ def create_psql_conf():
     if not os.path.exists(config_txt):
         text_file = open(config_txt, "w", encoding='utf-8')
         text_file.write('{"username":"postgres", "password":"admin", "host":"host", "database":"data"}')
+# create_psql_conf()
 
 
-<<<<<<< HEAD
-def read_sql_conf():
-    print("После создания txt файла ", os.getcwd())
-    print(os.listdir()) #Проверка файла txt
+def create_txt_file():
+    """ This function for creating a txt file for information of sql """
 
-    # os.chdir(a+f'\\{config_dir}')
-    with open("config.txt", "r", encoding='utf-8') as f: # Чтобы вытаскывать все данные
-        for l in f:
-            print(l)
-            data = l
-            a = json.loads(data)
-            print(type(a))
-            print(a, '\n', a['username'])
-=======
-def read_psql_conf():
-    global config_dir
-    a = os.getcwd()
-    for path in sys.path:
-        if os.path.exists(os.path.join(path, 'config/config.txt')):
-            print('some_module is heresdf safd asdfsfd : {}'.format(path))
-            a = path
+    text_psql = '{"username":"postgres", "password":"admin", "host":"localhost", "database":"data"}'
+    text_msql = '{"username":"beksultan", "password":"beksultan", "host":"127.0.0.1", "database":"data","port":"1433","sqldriver":"SQL Server", "server":"DESKTOP-OG81R5M\\SQLEXPRESS"}'
+    print("Я на директории ", os.getcwd())
+    if not os.path.isfile('config.txt') or os.path.isfile('config_msql.txt'):
+        text_psql_file = open('config.txt',"w")
+        text_psql_file.write(text_psql)
+        text_msql_file = open('config_msql.txt', 'w')
+        text_msql_file.write(text_msql)
 
-    print('desktop бул',a)
-    print(os.getcwd())
-    os.chdir(a+'\\config')
-    print(os.getcwd())
+
+def create_folder():
+    if not os.path.isdir("folder"):
+        os.mkdir("folder")
+    else:
+        os.chdir('folder')
+        print("Я в директории ",os.getcwd())
+        create_txt_file()
+
+
+
+create_folder()
+
+#
+# def read_sql_conf():
+#     print("После создания txt файла ", os.getcwd())
+#     print(os.listdir()) #Проверка файла txt
+#
+#     # os.chdir(a+f'\\{config_dir}')
+#     with open("config.txt", "r", encoding='utf-8') as f: # Чтобы вытаскывать все данные
+#         for l in f:
+#             print(l)
+#             data = l
+#             a = json.loads(data)
+#             print(type(a))
+#             print(a, '\n', a['username'])
+#
+# def read_psql_conf():
+#     global config_dir
+#     a = os.getcwd()
+#     for path in sys.path:
+#         if os.path.exists(os.path.join(path, 'config/config.txt')):
+#             print('some_module is heresdf safd asdfsfd : {}'.format(path))
+#             a = path
+#
+#     print('desktop бул',a)
+#     print(os.getcwd())
+#     os.chdir(a+'\\config')
+#     print(os.getcwd())
 
 
 
@@ -85,7 +110,7 @@ def read_psql_conf():
     #         # print(a, '\n', a['username'])
     #         return a
 # create_psql_conf()
-read_psql_conf()
+# read_psql_conf()
 # print(type(a))
 # print(a['username'])
 
@@ -121,28 +146,27 @@ read_psql_conf()
 # conn = psycopg2.connect(f"dbname={conf_sql['database']} user={conf_sql['username']} password={conf_sql['password']} host={conf_sql['host']}")
 # if conn:
 #         print('Подключено к PSQL')
->>>>>>> 6c8755e4321bc85e947eaa1d4d97f0fd367f73ec
 
-create_psql_conf()
-read_sql_conf()
+
+
 
 # Для подключение MSSQL
-def create_msql_conf():
-    global config_dir
-    config_txt = 'config_msql.txt'
-    directory_path = os.getcwd()
-
-    path = os.path.join(directory_path, config_dir)
-    print("Текущая деректория:", directory_path)
-    if not os.path.isdir(config_dir):
-         os.mkdir(config_dir)
-
-    os.chdir(directory_path+f'\\{config_dir}')
-    print('Следующая директория' + os.getcwd())
-
-    if not os.path.exists(config_txt):
-        text_file = open(config_txt, "w", encoding='utf-8')
-        text_file.write('{"username":"postgres", "password":"admin", "host":"host", "database":"data"}')
+# def create_msql_conf():
+#     global config_dir
+#     config_txt = 'config_msql.txt'
+#     directory_path = os.getcwd()
+#
+#     path = os.path.join(directory_path, config_dir)
+#     print("Текущая деректория:", directory_path)
+#     if not os.path.isdir(config_dir):
+#          os.mkdir(config_dir)
+#
+#     os.chdir(directory_path+f'\\{config_dir}')
+#     print('Следующая директория' + os.getcwd())
+#
+#     if not os.path.exists(config_txt):
+#         text_file = open(config_txt, "w", encoding='utf-8')
+#         text_file.write('{"username":"postgres", "password":"admin", "host":"host", "database":"data"}')
 
 # def psql():
 #     try:

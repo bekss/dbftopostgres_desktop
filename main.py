@@ -19,6 +19,29 @@ _MSSQL = 'Mssql'
 eel.init('web', allowed_extensions=['.js', '.html'])
 
 
+def create_txt_file():
+    """ This function for creating a txt file for information of sql """
+
+    text_psql = '{"username":"postgres", "password":"admin", "host":"localhost", "database":"data"}'
+    text_msql = '{"username":"beksultan", "password":"beksultan", "host":"127.0.0.1", "database":"data","port":"1433","sqldriver":"SQL Server", "server":"DESKTOP-OG81R5M\\SQLEXPRESS"}'
+    print("Я на директории ", os.getcwd())
+    if not os.path.isfile('config.txt') or os.path.isfile('config_msql.txt'):
+        text_psql_file = open('config.txt', "w")
+        text_psql_file.write(text_psql)
+        text_msql_file = open('config_msql.txt', 'w')
+        text_msql_file.write(text_msql)
+
+
+def create_folder():
+    if not os.path.isdir("folder"):
+        os.mkdir("folder")
+    else:
+        os.chdir('folder')
+        print("Я в директории ", os.getcwd())
+        create_txt_file()
+
+
+
 def chek_dbf_os(files):
     """This function cheking only files."""
     script_dir = os.path.dirname(__file__)
@@ -84,7 +107,6 @@ def read_msql_conf():
     a = os.getcwd()
     print(a)
     print(os.listdir())  # Проверка файла txt
-
     for path in sys.path:
         if os.path.exists(os.path.join(path, 'config/config_msql.txt')):
             print('config_msql.txt файл существует')
@@ -122,7 +144,6 @@ def selectFolder():
 
 def convert_folder_psql(files):
     """First cheking a folder, if in a folder have dbf files then begining to convert"""
-
     for path in sys.path:
         if os.path.exists(os.path.join(path, 'config/config.txt')):
             print('some_module is heresdf safd asdfsfd : {}'.format(path))
@@ -153,7 +174,6 @@ def convert_folder_msql(files):
         if os.path.exists(os.path.join(path, 'config/config_msql.txt')):
             print('some_module is heresdf safd asdfsfd : {}'.format(path))
             a = path  # Путь на один каталог назад
-
     os.chdir(a)
     msql = read_msql_conf()
     db = dataset.connect(
@@ -242,10 +262,11 @@ def data_psql(username, password, host, database):
 #                 print("ID=%s" % (row[0]))
 #                 row = cursor.fetchone()
 #                 print(row)
-#
+
 
 @eel.expose
 def psql_conn():
+
     """PSQL connection check"""
     global _CHOSED_SQL
     global _POSTSQL
@@ -330,8 +351,11 @@ def folder_return():
 def psql_con(data):
     print('psql принял', data)
 
+create_folder()
 
-eel.start('main.html', port=4000 )
+eel.start('main.html', port=4000)
+
+
 
 # def sql_connect(user=None, password=None, port=None, database=None):
 #     db = dataset.connect(url="postgresql+psycopg2://{}.:{}.@{}./{}.".format('postgres', 'admin', 'localhost', 'data'))
