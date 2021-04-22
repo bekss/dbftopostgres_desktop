@@ -42,7 +42,10 @@ def create_psql_conf():
 
 
 def create_txt_file():
-    """ This function for creating a txt file for information of sql """
+    """
+    Чтобы иницилизировать файл для получения информации о sql данных
+    This function for creating a txt file for information of sql
+    """
 
     text_psql = '{"username":"postgres", "password":"admin", "host":"localhost", "database":"data"}'
     text_msql = '{"username":"beksultan", "password":"beksultan", "host":"127.0.0.1", "database":"data","port":"1433","sqldriver":"SQL Server", "server":"DESKTOP-OG81R5M\\SQLEXPRESS"}'

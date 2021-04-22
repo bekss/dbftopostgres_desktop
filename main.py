@@ -16,11 +16,16 @@ _CHOSED_SQL = ' '
 _POSTSQL = 'Postgresql'
 _MSSQL = 'Mssql'
 
+_CONFIG = 'config'
+
 eel.init('web', allowed_extensions=['.js', '.html'])
 
 
 def create_txt_file():
-    """ This function for creating a txt file for information of sql """
+    """
+    Чтобы иницилизировать файл для получения информации о sql данных
+    This function for creating a txt file for information of sql
+    """
 
     text_psql = '{"username":"postgres", "password":"admin", "host":"localhost", "database":"data"}'
     text_msql = '{"username":"beksultan", "password":"beksultan", "host":"127.0.0.1", "database":"data","port":"1433","sqldriver":"SQL Server", "server":"DESKTOP-OG81R5M\\SQLEXPRESS"}'
@@ -33,13 +38,14 @@ def create_txt_file():
 
 
 def create_folder():
-    if not os.path.isdir("folder"):
-        os.mkdir("folder")
-    else:
-        os.chdir('folder')
+    if not os.path.isdir(_CONFIG):
+        os.mkdir(_CONFIG)
+        os.chdir(_CONFIG)
         print("Я в директории ", os.getcwd())
         create_txt_file()
 
+
+create_folder()
 
 
 def chek_dbf_os(files):
@@ -350,8 +356,6 @@ def folder_return():
 @eel.expose
 def psql_con(data):
     print('psql принял', data)
-
-create_folder()
 
 eel.start('main.html', port=4000)
 
